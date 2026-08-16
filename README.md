@@ -1,63 +1,74 @@
-# URBAN//INTELLIGENCE
+# 🌆 URBAN//INTELLIGENCE
 
-## Urban Pressure & Environmental Intelligence Dashboard
+### Urban Pressure & Environmental Analytics Dashboard
 
-**URBAN//INTELLIGENCE** is a data analytics and visualization platform designed to analyze **urban pressure, pollution, environmental conditions, and station-level patterns** through an interactive web dashboard.
+URBAN//INTELLIGENCE is an interactive **urban analytics and environmental intelligence platform** designed to analyze urban pressure, pollution patterns, and station-level environmental conditions through a web-based dashboard.
 
-The project transforms structured urban and environmental datasets into clear visual insights that can support **urban monitoring, spatial analysis, environmental assessment, and data-driven decision making**.
+The project combines structured environmental datasets with a Flask backend and an interactive frontend to transform raw data into meaningful visual insights.
 
 ---
 
 ## 🎯 Objective
 
-The main objective is to build an interactive analytics dashboard that helps users:
+The objective of URBAN//INTELLIGENCE is to provide a data-driven platform for:
 
-* Monitor urban pressure across different stations
-* Analyze pollution and environmental patterns
-* Compare station-level conditions
-* Explore daily pressure trends
-* Identify high-pressure urban locations
-* Present complex datasets through intuitive visualizations
+* Monitoring urban pressure across stations
+* Analyzing daily pollution patterns
+* Comparing environmental conditions
+* Identifying high-pressure locations
+* Exploring temporal trends
+* Presenting complex environmental data through interactive visualizations
 
 ---
 
 ## 📊 Dashboard
 
-The dashboard provides an interactive interface for exploring:
+The application provides a multi-page analytics experience:
 
-* **Urban Pressure**
-* **Station-wise Analysis**
-* **Daily Pollution Trends**
-* **Environmental Indicators**
-* **Comparative Analytics**
-* **Key Performance Indicators (KPIs)**
+### 🏠 Home — `index.html`
 
-The interface is designed with a clean, modern analytics-focused UI using a **white, red, and pink visual theme**.
+Introduces the URBAN//INTELLIGENCE platform and provides access to the analytics interface.
+
+### 📈 Dashboard — `dashboard.html`
+
+Provides interactive analysis of:
+
+* Urban pressure
+* Station-level indicators
+* Pollution trends
+* Environmental patterns
+* Key performance indicators
+* Comparative visualizations
+
+### 🔎 Results — `result.html`
+
+Presents analytical results and derived urban intelligence insights based on the available datasets.
 
 ---
 
 ## 🧠 How It Works
 
 ```text
-Raw Urban & Environmental Data
-            ↓
-      Data Processing
-            ↓
-     Feature Preparation
-            ↓
-      Analytics Engine
-            ↓
-     Interactive Dashboard
-            ↓
-   Urban Intelligence Insights
+Environmental & Urban Datasets
+              ↓
+        Data Processing
+              ↓
+       Flask Application
+              ↓
+       Frontend Analytics
+              ↓
+      Interactive Dashboard
+              ↓
+      Urban Intelligence
 ```
 
-The datasets are loaded by the frontend analytics engine and transformed into interactive charts, indicators, comparisons, and station-level insights.
+The datasets are stored in CSV format and processed through the application to generate visual analytics and urban environmental insights.
 
 ---
 
 ## 📁 Project Structure
 
+```text
 UrbanIntelligence/
 │
 ├── data/
@@ -76,22 +87,23 @@ UrbanIntelligence/
 ├── app.py
 ├── render_start.txt
 └── requirements.txt
+```
 
 ---
 
-## 📂 Dataset Description
-
-### `urban_pressure_by_station.csv`
-
-Contains station-level urban pressure information used for comparative station analysis and visualization.
-
-### `powerbi_urban_pressure.csv`
-
-Contains processed urban pressure indicators prepared for analytics and dashboard visualization.
+## 📂 Datasets
 
 ### `daily_pollution_pressure.csv`
 
-Contains daily pollution and pressure observations used to analyze temporal environmental patterns.
+Contains daily pollution and urban-pressure observations used for temporal trend analysis.
+
+### `powerbi_urban_pressure.csv`
+
+Contains processed urban pressure indicators used for analytical visualization and comparative assessment.
+
+### `urban_pressure_by_station.csv`
+
+Contains station-level urban pressure information used to compare conditions across monitoring locations.
 
 ---
 
@@ -104,71 +116,98 @@ Contains daily pollution and pressure observations used to analyze temporal envi
 * JavaScript
 * Chart.js
 
-### Data Analytics
+### Backend
 
 * Python
+* Flask
+* Flask-CORS
+
+### Data Analytics
+
 * Pandas
 * CSV-based datasets
 
-### Visualization
-
-* Interactive charts
-* KPI cards
-* Station comparisons
-* Trend analysis
-* Data-driven dashboard components
-
 ### Deployment
 
-* Render
 * GitHub
+* Render
+* Gunicorn
 
 ---
 
-## 📈 Key Features
+## ✨ Key Features
 
 * Interactive urban analytics dashboard
-* Station-wise pressure analysis
-* Daily pollution trend visualization
-* Environmental data exploration
+* Station-wise urban pressure analysis
+* Daily pollution trend analysis
+* Environmental data visualization
 * KPI-based monitoring
-* Responsive web interface
-* Clean white/red/pink dashboard design
-* Lightweight CSV-based data architecture
-* Deployment-ready project structure
+* Multi-page web interface
+* Responsive frontend
+* Flask-powered backend
+* CSV-based data pipeline
+* Render deployment support
 
 ---
 
-## 💡 Use Cases
+## 🔬 Analytics Workflow
 
-URBAN//INTELLIGENCE can support:
+The project follows a structured analytics workflow:
+
+1. **Data Collection**
+   Urban and environmental datasets are collected and organized into CSV files.
+
+2. **Data Preparation**
+   Data is structured for station-level and temporal analysis.
+
+3. **Backend Integration**
+   Flask serves the application and provides access to the frontend and datasets.
+
+4. **Visualization**
+   JavaScript and Chart.js transform the processed data into interactive charts and indicators.
+
+5. **Urban Intelligence**
+   The dashboard presents patterns and comparisons that help users understand urban pressure and pollution conditions.
+
+---
+
+## 🌍 Use Cases
+
+URBAN//INTELLIGENCE can be used for:
 
 * Urban environmental monitoring
-* Pollution assessment
+* Pollution analysis
 * Smart-city analytics
-* Station-level comparison
-* Environmental planning
-* Urban data visualization
+* Station-level environmental assessment
+* Urban planning support
+* Environmental data visualization
 * Data analytics portfolios
-* Decision-support systems
+* Decision-support applications
 
 ---
 
 ## 🚀 Deployment
 
-The project is structured for deployment on **Render** as a web application.
+The application is structured for deployment on **Render**.
 
-The frontend can be served directly through the configured deployment environment, while the CSV datasets remain part of the project structure for dashboard analytics.
+The Flask backend serves the frontend application and provides access to the project data. Deployment configuration is maintained through:
+
+```text
+render_start.txt
+requirements.txt
+app.py
+```
 
 ---
 
-## 🔬 Project Highlights
+## 📌 Project Focus
 
 **Domain:** Urban Analytics & Environmental Intelligence
 
-**Focus:** Data Analytics • Environmental Monitoring • Urban Pressure • Visualization
+**Core Areas:**
+Data Analytics • Environmental Monitoring • Urban Pressure • Pollution Analysis • Data Visualization
 
-**Output:** Interactive Web Dashboard
+**Application Type:** Interactive Web Dashboard
 
 ---
 
@@ -176,4 +215,4 @@ The frontend can be served directly through the configured deployment environmen
 
 **Srinjoyee Bandopadhyay**
 
-Data Analytics | Machine Learning | AI | Geospatial Intelligence
+Machine Learning • Data Analytics • AI • Geospatial Intelligence
