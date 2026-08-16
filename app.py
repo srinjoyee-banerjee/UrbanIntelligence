@@ -1,4 +1,4 @@
-```python
+
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 import os
@@ -100,4 +100,4 @@ if __name__ == "__main__":
         port=port,
         debug=False
     )
-```
+
