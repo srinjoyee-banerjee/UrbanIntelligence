@@ -1,3 +1,7 @@
+/* ============================================================
+   URBAN//INTELLIGENCE
+   NEON BLACK + YELLOW INTERFACE
+   ============================================================ */
 
 * {
     margin: 0;
@@ -5,32 +9,137 @@
     box-sizing: border-box;
 }
 
+:root {
+    --black: #050505;
+    --black-2: #0a0a0a;
+    --panel: #0d0d0d;
+    --panel-2: #111111;
+    --yellow: #f5ff00;
+    --yellow-soft: #dfff00;
+    --text: #f5f5f5;
+    --muted: #999999;
+    --border: rgba(245, 255, 0, 0.20);
+    --glow: rgba(245, 255, 0, 0.45);
+}
+
+/* ============================================================
+   GLOBAL
+   ============================================================ */
+
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: Arial, Helvetica, sans-serif;
-    background: #ffffff;
-    color: #24171c;
+    background: var(--black);
+    color: var(--text);
+    overflow-x: hidden;
+    position: relative;
 }
+
+/* animated background grid */
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: -2;
+
+    background-image:
+        linear-gradient(rgba(245, 255, 0, 0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245, 255, 0, 0.025) 1px, transparent 1px);
+
+    background-size: 45px 45px;
+
+    animation: gridMove 18s linear infinite;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    left: -200px;
+    top: 20%;
+    border-radius: 50%;
+    background: rgba(245, 255, 0, 0.035);
+    filter: blur(100px);
+    pointer-events: none;
+    z-index: -1;
+
+    animation: ambientGlow 8s ease-in-out infinite alternate;
+}
+
+@keyframes gridMove {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(45px);
+    }
+}
+
+@keyframes ambientGlow {
+    from {
+        opacity: 0.4;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1.15);
+    }
+}
+
+/* ============================================================
+   NAVBAR
+   ============================================================ */
 
 .navbar {
     height: 78px;
     padding: 0 6%;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
 
-    border-bottom: 1px solid #f1dce3;
+    background: rgba(5, 5, 5, 0.92);
+    border-bottom: 1px solid var(--border);
 
-    background: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+
+    backdrop-filter: blur(12px);
+
+    box-shadow:
+        0 0 20px rgba(245, 255, 0, 0.04);
 }
 
 .logo {
-    font-weight: 800;
-    letter-spacing: 2px;
+    font-weight: 900;
+    letter-spacing: 3px;
     font-size: 18px;
+    color: white;
+
+    transition: 0.3s ease;
+}
+
+.logo:hover {
+    text-shadow:
+        0 0 8px var(--yellow),
+        0 0 20px var(--yellow);
 }
 
 .logo span {
-    color: #c51f3d;
+    color: var(--yellow);
+
+    text-shadow:
+        0 0 7px var(--yellow),
+        0 0 18px rgba(245, 255, 0, 0.5);
 }
 
 nav {
@@ -40,18 +149,41 @@ nav {
 
 nav a {
     text-decoration: none;
-    color: #6d5960;
+    color: #888;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 700;
+    position: relative;
+    transition: 0.3s ease;
+}
+
+nav a::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 0;
+    height: 2px;
+    background: var(--yellow);
+
+    box-shadow: 0 0 8px var(--yellow);
+
+    transition: width 0.3s ease;
 }
 
 nav a:hover,
 nav a.active {
-    color: #c51f3d;
+    color: var(--yellow);
+    text-shadow: 0 0 10px rgba(245, 255, 0, 0.7);
 }
 
+nav a:hover::after,
+nav a.active::after {
+    width: 100%;
+}
 
-/* HERO */
+/* ============================================================
+   HERO
+   ============================================================ */
 
 .hero {
     min-height: 620px;
@@ -61,14 +193,31 @@ nav a.active {
     grid-template-columns: 1.3fr 0.7fr;
     align-items: center;
     gap: 80px;
+
+    animation: pageEnter 0.9s ease both;
+}
+
+@keyframes pageEnter {
+    from {
+        opacity: 0;
+        transform: translateY(25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .eyebrow,
 .section-tag {
-    color: #c51f3d;
+    color: var(--yellow);
     font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 2px;
+    font-weight: 900;
+    letter-spacing: 3px;
+
+    text-shadow:
+        0 0 8px rgba(245, 255, 0, 0.7);
 }
 
 .hero h1 {
@@ -79,16 +228,25 @@ nav a.active {
 }
 
 .hero h1 span {
-    color: #c51f3d;
+    color: var(--yellow);
+
+    text-shadow:
+        0 0 10px rgba(245, 255, 0, 0.7),
+        0 0 30px rgba(245, 255, 0, 0.35);
 }
 
 .hero p {
     max-width: 650px;
     margin-top: 30px;
+
     font-size: 18px;
     line-height: 1.7;
-    color: #765f67;
+    color: #aaa;
 }
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
 
 .hero-buttons {
     display: flex;
@@ -100,30 +258,110 @@ nav a.active {
     padding: 15px 24px;
     text-decoration: none;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 800;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease;
 }
 
 .btn.primary {
-    background: #c51f3d;
-    color: white;
+    background: var(--yellow);
+    color: #050505;
+
+    box-shadow:
+        0 0 12px rgba(245, 255, 0, 0.45),
+        0 0 30px rgba(245, 255, 0, 0.15);
+}
+
+.btn.primary:hover {
+    transform: translateY(-4px);
+
+    box-shadow:
+        0 0 15px var(--yellow),
+        0 0 40px rgba(245, 255, 0, 0.45);
 }
 
 .btn.secondary {
-    border: 1px solid #c51f3d;
-    color: #c51f3d;
+    border: 1px solid var(--yellow);
+    color: var(--yellow);
+    background: transparent;
+
+    box-shadow: inset 0 0 0 rgba(245, 255, 0, 0);
 }
 
+.btn.secondary:hover {
+    background: var(--yellow);
+    color: #050505;
 
-/* HERO CARD */
+    box-shadow:
+        0 0 15px var(--yellow),
+        0 0 35px rgba(245, 255, 0, 0.35);
+
+    transform: translateY(-4px);
+}
+
+/* ============================================================
+   HERO CARD
+   ============================================================ */
 
 .hero-card {
     padding: 40px;
-    border: 1px solid #f0d8df;
-    background: #fff8fa;
+
+    border: 1px solid var(--border);
+    background: linear-gradient(
+        145deg,
+        rgba(20, 20, 20, 0.95),
+        rgba(8, 8, 8, 0.95)
+    );
+
+    box-shadow:
+        0 0 25px rgba(245, 255, 0, 0.06),
+        inset 0 0 25px rgba(245, 255, 0, 0.025);
+
+    position: relative;
+    overflow: hidden;
+
+    animation: floatCard 5s ease-in-out infinite;
+}
+
+.hero-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 70%;
+    height: 2px;
+
+    background: var(--yellow);
+    box-shadow: 0 0 15px var(--yellow);
+
+    animation: scanLine 4s linear infinite;
+}
+
+@keyframes scanLine {
+    0% {
+        left: -100%;
+    }
+
+    100% {
+        left: 150%;
+    }
+}
+
+@keyframes floatCard {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
 }
 
 .card-label {
-    color: #c51f3d;
+    color: var(--yellow);
     font-size: 11px;
     letter-spacing: 2px;
     font-weight: bold;
@@ -131,10 +369,14 @@ nav a.active {
 
 .big-number {
     font-size: 100px;
-    font-weight: 800;
-    color: #c51f3d;
+    font-weight: 900;
+    color: var(--yellow);
     line-height: 1;
     margin-top: 15px;
+
+    text-shadow:
+        0 0 10px rgba(245, 255, 0, 0.7),
+        0 0 30px rgba(245, 255, 0, 0.3);
 }
 
 .card-title {
@@ -145,13 +387,15 @@ nav a.active {
 .mini-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
+
     margin-top: 35px;
-    border-top: 1px solid #efd8df;
+
+    border-top: 1px solid var(--border);
 }
 
 .mini-grid div {
     padding: 18px 0;
-    border-bottom: 1px solid #efd8df;
+    border-bottom: 1px solid rgba(245, 255, 0, 0.1);
 }
 
 .mini-grid strong {
@@ -163,19 +407,24 @@ nav a.active {
     display: block;
     margin-top: 5px;
     font-size: 11px;
-    color: #866c75;
+    color: #777;
 }
 
-
-/* INTRO */
+/* ============================================================
+   INTRO
+   ============================================================ */
 
 .intro {
     padding: 80px 8%;
-    background: #fff6f8;
+
+    background: rgba(10, 10, 10, 0.9);
 
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 100px;
+
+    border-top: 1px solid rgba(245, 255, 0, 0.12);
+    border-bottom: 1px solid rgba(245, 255, 0, 0.12);
 }
 
 .intro h2 {
@@ -185,16 +434,19 @@ nav a.active {
 }
 
 .intro > p {
-    color: #765f67;
+    color: #999;
     line-height: 1.8;
 }
 
-
-/* DASHBOARD */
+/* ============================================================
+   DASHBOARD / RESULTS
+   ============================================================ */
 
 .dashboard,
 .results {
     padding: 60px 7%;
+
+    animation: pageEnter 0.7s ease both;
 }
 
 .page-heading {
@@ -211,28 +463,56 @@ nav a.active {
 }
 
 .page-heading p:not(.section-tag) {
-    color: #806c73;
+    color: #888;
     margin-top: 10px;
 }
+
+/* ============================================================
+   STATUS
+   ============================================================ */
 
 .status {
     font-size: 11px;
     font-weight: bold;
     letter-spacing: 1px;
-    color: #c51f3d;
+    color: var(--yellow);
+
+    text-shadow: 0 0 8px rgba(245, 255, 0, 0.6);
 }
 
 .status span {
     width: 8px;
     height: 8px;
+
     display: inline-block;
-    background: #c51f3d;
+
+    background: var(--yellow);
     border-radius: 50%;
+
     margin-right: 7px;
+
+    box-shadow:
+        0 0 7px var(--yellow),
+        0 0 15px var(--yellow);
+
+    animation: pulse 1.4s ease-in-out infinite;
 }
 
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+        transform: scale(1);
+    }
 
-/* KPI */
+    50% {
+        opacity: 0.45;
+        transform: scale(0.7);
+    }
+}
+
+/* ============================================================
+   KPI
+   ============================================================ */
 
 .kpi-grid {
     display: grid;
@@ -243,13 +523,53 @@ nav a.active {
 
 .kpi {
     padding: 28px;
-    border: 1px solid #f0dce2;
-    background: white;
+
+    border: 1px solid var(--border);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(18, 18, 18, 0.95),
+            rgba(8, 8, 8, 0.95)
+        );
+
+    position: relative;
+    overflow: hidden;
+
+    transition:
+        transform 0.3s ease,
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.kpi::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    width: 3px;
+    height: 100%;
+
+    background: var(--yellow);
+
+    box-shadow:
+        0 0 12px var(--yellow);
+}
+
+.kpi:hover {
+    transform: translateY(-7px);
+
+    border-color: rgba(245, 255, 0, 0.65);
+
+    box-shadow:
+        0 0 20px rgba(245, 255, 0, 0.12),
+        inset 0 0 20px rgba(245, 255, 0, 0.03);
 }
 
 .kpi span {
     display: block;
-    color: #886d76;
+    color: #888;
     font-size: 10px;
     letter-spacing: 1.5px;
     font-weight: bold;
@@ -257,23 +577,34 @@ nav a.active {
 
 .kpi strong {
     display: block;
-    color: #c51f3d;
+    color: var(--yellow);
     font-size: 34px;
     margin-top: 15px;
+
+    text-shadow:
+        0 0 8px rgba(245, 255, 0, 0.5);
 }
 
 .kpi small {
     display: block;
     margin-top: 5px;
-    color: #886d76;
+    color: #777;
 }
 
 .kpi.highlight {
-    background: #fff1f4;
+    background:
+        linear-gradient(
+            145deg,
+            rgba(245, 255, 0, 0.08),
+            rgba(12, 12, 12, 0.98)
+        );
+
+    border-color: rgba(245, 255, 0, 0.4);
 }
 
-
-/* CHARTS */
+/* ============================================================
+   CHARTS
+   ============================================================ */
 
 .chart-grid {
     display: grid;
@@ -283,9 +614,28 @@ nav a.active {
 
 .chart-card {
     padding: 30px;
-    border: 1px solid #f0dce2;
-    background: white;
+
+    border: 1px solid var(--border);
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(16, 16, 16, 0.96),
+            rgba(7, 7, 7, 0.96)
+        );
+
     min-height: 350px;
+
+    transition:
+        border-color 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.chart-card:hover {
+    border-color: rgba(245, 255, 0, 0.5);
+
+    box-shadow:
+        0 0 25px rgba(245, 255, 0, 0.08);
 }
 
 .chart-header h2 {
@@ -294,8 +644,9 @@ nav a.active {
     font-size: 22px;
 }
 
-
-/* INSIGHTS */
+/* ============================================================
+   INSIGHTS
+   ============================================================ */
 
 .insight-section,
 .table-section {
@@ -309,6 +660,7 @@ nav a.active {
 
 .insight-grid {
     margin-top: 25px;
+
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 18px;
@@ -316,14 +668,35 @@ nav a.active {
 
 .insight {
     padding: 28px;
-    border-top: 3px solid #c51f3d;
-    background: #fff8fa;
+
+    border-top: 3px solid var(--yellow);
+
+    background:
+        linear-gradient(
+            145deg,
+            #111111,
+            #080808
+        );
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+.insight:hover {
+    transform: translateY(-6px);
+
+    box-shadow:
+        0 0 25px rgba(245, 255, 0, 0.09);
 }
 
 .insight span {
-    color: #c51f3d;
+    color: var(--yellow);
     font-size: 11px;
     font-weight: bold;
+
+    text-shadow:
+        0 0 7px rgba(245, 255, 0, 0.6);
 }
 
 .insight h3 {
@@ -332,22 +705,33 @@ nav a.active {
 
 .insight p {
     margin-top: 10px;
-    color: #765f67;
+    color: #888;
     line-height: 1.6;
     font-size: 14px;
 }
 
-
-/* RESULTS */
+/* ============================================================
+   RESULTS
+   ============================================================ */
 
 .top-result {
     padding: 40px;
-    background: #fff1f4;
-    border-left: 5px solid #c51f3d;
+
+    background:
+        linear-gradient(
+            120deg,
+            rgba(245, 255, 0, 0.08),
+            rgba(10, 10, 10, 0.95)
+        );
+
+    border-left: 5px solid var(--yellow);
 
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    box-shadow:
+        0 0 25px rgba(245, 255, 0, 0.05);
 }
 
 .top-result h2 {
@@ -356,7 +740,7 @@ nav a.active {
 }
 
 .top-result p:not(.section-tag) {
-    color: #765f67;
+    color: #888;
     margin-top: 8px;
 }
 
@@ -368,27 +752,35 @@ nav a.active {
     display: block;
     font-size: 10px;
     letter-spacing: 2px;
-    color: #806c73;
+    color: #777;
 }
 
 .pressure-score strong {
     display: block;
     font-size: 60px;
-    color: #c51f3d;
+    color: var(--yellow);
+
+    text-shadow:
+        0 0 10px rgba(245, 255, 0, 0.7),
+        0 0 30px rgba(245, 255, 0, 0.3);
 }
 
 .pressure-score small {
     font-weight: bold;
-    color: #c51f3d;
+    color: var(--yellow);
 }
 
-
-/* TABLE */
+/* ============================================================
+   TABLE
+   ============================================================ */
 
 .table-wrapper {
     margin-top: 25px;
     overflow-x: auto;
-    border: 1px solid #f0dce2;
+
+    border: 1px solid var(--border);
+
+    background: #090909;
 }
 
 table {
@@ -397,45 +789,95 @@ table {
 }
 
 th {
-    background: #fff1f4;
-    color: #6d5960;
+    background: #151515;
+    color: var(--yellow);
+
     font-size: 11px;
     text-align: left;
     letter-spacing: 1px;
+
+    text-shadow:
+        0 0 6px rgba(245, 255, 0, 0.45);
 }
 
 th,
 td {
     padding: 17px 20px;
-    border-bottom: 1px solid #f1e3e7;
+    border-bottom: 1px solid rgba(245, 255, 0, 0.08);
+}
+
+tr {
+    transition: background 0.25s ease;
+}
+
+tbody tr:hover {
+    background: rgba(245, 255, 0, 0.045);
 }
 
 td {
     font-size: 13px;
+    color: #ddd;
 }
 
 td:first-child {
-    color: #c51f3d;
+    color: var(--yellow);
     font-weight: bold;
 }
 
 .class-high {
-    color: #c51f3d;
+    color: #ffea00;
     font-weight: bold;
+
+    text-shadow:
+        0 0 6px rgba(245, 255, 0, 0.45);
 }
 
 .class-moderate {
-    color: #a75c70;
+    color: #c5c5c5;
     font-weight: bold;
 }
 
 .class-low {
-    color: #658a74;
+    color: #777;
     font-weight: bold;
 }
 
+/* ============================================================
+   SCROLLBAR
+   ============================================================ */
 
-/* RESPONSIVE */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #050505;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--yellow);
+
+    box-shadow:
+        0 0 10px var(--yellow);
+}
+
+/* ============================================================
+   SELECTION
+   ============================================================ */
+
+::selection {
+    background: var(--yellow);
+    color: #000;
+}
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
 
 @media (max-width: 900px) {
 
@@ -457,8 +899,16 @@ td:first-child {
 
 @media (max-width: 600px) {
 
+    .navbar {
+        padding: 0 5%;
+    }
+
     nav {
         gap: 12px;
+    }
+
+    nav a {
+        font-size: 12px;
     }
 
     .hero {
@@ -484,6 +934,19 @@ td:first-child {
 
     .pressure-score {
         text-align: left;
+    }
+
+    .hero h1 {
+        font-size: 58px;
+        letter-spacing: -3px;
+    }
+
+    .hero-card {
+        padding: 28px;
+    }
+
+    .big-number {
+        font-size: 75px;
     }
 
 }
