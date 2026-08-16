@@ -1,17 +1,17 @@
-
+from flask import Flask, send_from_directory
+from flask_cors import CORS
 import os
-from flask import Flask, send_from_directory, jsonify
+
+app = Flask(__name__)
+CORS(app)
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 DATA_DIR = os.path.join(BASE_DIR, "data")
 
-app = Flask(__name__)
-
 
 # ============================================================
-# FRONTEND
+# HOME
 # ============================================================
 
 @app.route("/")
@@ -19,58 +19,56 @@ def home():
     return send_from_directory(FRONTEND_DIR, "index.html")
 
 
+# ============================================================
+# DASHBOARD
+# ============================================================
+
 @app.route("/dashboard")
+@app.route("/dashboard/")
+@app.route("/dashboard.html")
 def dashboard():
     return send_from_directory(FRONTEND_DIR, "dashboard.html")
 
 
+# ============================================================
+# RESULTS
+# ============================================================
+
+@app.route("/results")
+@app.route("/results/")
 @app.route("/result")
-def result():
+@app.route("/result/")
+@app.route("/result.html")
+def results():
     return send_from_directory(FRONTEND_DIR, "result.html")
 
 
 # ============================================================
-# STATIC FILES
+# FRONTEND CSS / JS
 # ============================================================
 
-@app.route("/style.css")
-def style():
-    return send_from_directory(FRONTEND_DIR, "style.css")
+@app.route("/<path:filename>")
+def frontend_files(filename):
+    file_path = os.path.join(FRONTEND_DIR, filename)
 
+    if os.path.isfile(file_path):
+        return send_from_directory(FRONTEND_DIR, filename)
 
-@app.route("/script.js")
-def script():
-    return send_from_directory(FRONTEND_DIR, "script.js")
+    return "Not Found", 404
 
 
 # ============================================================
-# CSV DATA
+# DATA FILES
 # ============================================================
 
 @app.route("/data/<path:filename>")
-def serve_data(filename):
+def data_files(filename):
     return send_from_directory(DATA_DIR, filename)
 
 
 # ============================================================
-# HEALTH CHECK
-# ============================================================
-
-@app.route("/api/health")
-def health():
-    return jsonify({
-        "status": "online",
-        "project": "URBAN//INTELLIGENCE"
-    })
-
-
-# ============================================================
-# LOCAL RUN
+# RUN
 # ============================================================
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(
-        host="0.0.0.0",
-        port=port
-    )
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
