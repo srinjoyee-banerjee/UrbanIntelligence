@@ -6,7 +6,6 @@
 
 const DATA_PATH = "/data/";
 
-
 const DATA_FILES = {
 
     pressure:
@@ -21,10 +20,10 @@ const DATA_FILES = {
 };
 
 
-
 let pressureData = [];
 let powerbiData = [];
 let dailyData = [];
+
 
 
 
@@ -33,15 +32,15 @@ let dailyData = [];
 // ============================================================
 
 
-async function loadCSV(url) {
+async function loadCSV(url){
 
     const response = await fetch(url);
 
 
-    if (!response.ok) {
+    if(!response.ok){
 
         throw new Error(
-            "Unable to load " + url
+            "Cannot load " + url
         );
 
     }
@@ -49,7 +48,6 @@ async function loadCSV(url) {
 
     const text =
         await response.text();
-
 
 
     return Papa.parse(
@@ -62,6 +60,7 @@ async function loadCSV(url) {
     ).data;
 
 }
+
 
 
 
@@ -100,7 +99,6 @@ function setText(id,value){
     const el =
         document.getElementById(id);
 
-
     if(el){
 
         el.textContent=value;
@@ -125,7 +123,7 @@ function findColumn(row,names){
 
     for(const name of names){
 
-        const found =
+        const col =
             keys.find(
                 k =>
                 k.toLowerCase().trim()
@@ -134,8 +132,8 @@ function findColumn(row,names){
             );
 
 
-        if(found)
-            return found;
+        if(col)
+            return col;
 
     }
 
@@ -143,7 +141,7 @@ function findColumn(row,names){
 
     for(const name of names){
 
-        const found =
+        const col =
             keys.find(
                 k =>
                 k.toLowerCase()
@@ -153,8 +151,8 @@ function findColumn(row,names){
             );
 
 
-        if(found)
-            return found;
+        if(col)
+            return col;
 
     }
 
@@ -196,14 +194,8 @@ async function loadAllData(){
 
 
         console.log(
-            "URBAN//INTELLIGENCE DATA READY"
+            "URBAN//INTELLIGENCE READY"
         );
-
-        console.log(
-            "Stations:",
-            pressureData.length
-        );
-
 
 
         populatePage();
@@ -216,11 +208,6 @@ async function loadAllData(){
 
         console.error(error);
 
-
-        showError(
-            "Unable to load data"
-        );
-
     }
 
 }
@@ -230,7 +217,7 @@ async function loadAllData(){
 
 
 // ============================================================
-// PAGE ROUTER
+// ROUTER
 // ============================================================
 
 
@@ -245,27 +232,32 @@ function populatePage(){
 
     if(page.includes("dashboard")){
 
+
         buildDashboard();
+
 
     }
 
 
     else if(page.includes("result")){
 
+
         buildResults();
+
 
     }
 
 
     else{
 
+
         buildHome();
+
 
     }
 
 
 }
-
 
 
 
@@ -290,7 +282,7 @@ function buildHome(){
 
 
 
-    const count =
+    const stations =
         new Set(
             pressureData.map(
                 r=>r[stationColumn]
@@ -301,7 +293,7 @@ function buildHome(){
 
     setText(
         "station-count",
-        count || 30
+        stations || 30
     );
 
 
@@ -379,9 +371,9 @@ function buildDashboard(){
 
 
 
-    createPressureChart(
-        pressureData.slice(0,10)
-    );
+    createSeasonChart();
+
+    createHourChart();
 
 
 }
@@ -391,6 +383,7 @@ function buildDashboard(){
 
 
 function average(column){
+
 
     if(!column)
         return 0;
@@ -420,6 +413,7 @@ function average(column){
     /
     values.length;
 
+
 }
 
 
@@ -427,87 +421,161 @@ function average(column){
 
 
 // ============================================================
-// CHART
+// SEASON CHART
 // ============================================================
 
 
-function createPressureChart(rows){
+function createSeasonChart(){
 
 
     const canvas =
         document.getElementById(
-            "pressureChart"
+            "seasonChart"
         );
 
 
-
-    if(!canvas || typeof Chart==="undefined")
+    if(!canvas)
         return;
 
 
 
-    const labels =
-        rows.map(
-            r =>
-            r.station_name ||
-            r["Station Name"] ||
-            "Station"
-        );
-
-
-
-    const values =
-        rows.map(
-            r =>
-            num(
-                r.pressure_score
-            ) || 0
-        );
-
-
-
-    if(window.pressureChartInstance){
-
-        window.pressureChartInstance.destroy();
-
-    }
-
-
-
-
-    window.pressureChartInstance =
     new Chart(
 
         canvas,
 
         {
 
+
+        type:"line",
+
+
+        data:{
+
+
+            labels:[
+
+                "Winter",
+                "Summer",
+                "Monsoon",
+                "Post Monsoon"
+
+            ],
+
+
+            datasets:[{
+
+                label:"Pollution Pressure",
+
+
+                data:[
+
+                    62,
+                    38,
+                    24,
+                    45
+
+                ],
+
+
+                borderColor:"#f5ff00",
+
+                backgroundColor:
+                "rgba(245,255,0,0.15)",
+
+
+                fill:true,
+
+                tension:0.4
+
+
+            }]
+
+
+        },
+
+
+        options:chartOptions()
+
+
+        }
+
+
+    );
+
+
+}
+
+
+
+
+
+// ============================================================
+// HOURLY CHART
+// ============================================================
+
+
+function createHourChart(){
+
+
+    const canvas =
+        document.getElementById(
+            "hourChart"
+        );
+
+
+    if(!canvas)
+        return;
+
+
+
+    new Chart(
+
+        canvas,
+
+        {
+
+
         type:"bar",
 
 
         data:{
 
-            labels,
+
+            labels:[
+
+                "00",
+                "03",
+                "06",
+                "09",
+                "12",
+                "15",
+                "18",
+                "21"
+
+            ],
 
 
             datasets:[{
 
-                label:
-                "Pressure Score",
+                label:"PM2.5",
 
 
-                data:values,
+                data:[
+
+                    28,
+                    31,
+                    40,
+                    58,
+                    45,
+                    39,
+                    50,
+                    54
+
+                ],
 
 
                 backgroundColor:
                 "#f5ff00",
-
-
-                borderColor:
-                "#ffffff",
-
-
-                borderWidth:1,
 
 
                 borderRadius:8
@@ -515,58 +583,90 @@ function createPressureChart(rows){
 
             }]
 
+
         },
 
 
-
-        options:{
-
-
-            responsive:true,
+        options:chartOptions()
 
 
-            animation:{
+        }
 
-                duration:1500
 
-            },
+    );
+
+
+}
 
 
 
-            plugins:{
 
 
-                legend:{
 
-                    display:false
+// ============================================================
+// CHART STYLE
+// ============================================================
+
+
+function chartOptions(){
+
+
+    return {
+
+
+        responsive:true,
+
+
+        animation:{
+
+            duration:1500
+
+        },
+
+
+        plugins:{
+
+
+            legend:{
+
+
+                labels:{
+
+
+                    color:"#f5ff00"
+
 
                 }
 
+
+            }
+
+
+        },
+
+
+        scales:{
+
+
+            x:{
+
+
+                ticks:{
+
+                    color:"#999"
+
+                }
+
+
             },
 
 
-
-            scales:{
-
-
-                x:{
-
-                    ticks:{
-
-                        color:"#999"
-
-                    }
-
-                },
+            y:{
 
 
-                y:{
+                ticks:{
 
-                    ticks:{
-
-                        color:"#999"
-
-                    }
+                    color:"#999"
 
                 }
 
@@ -577,7 +677,7 @@ function createPressureChart(rows){
         }
 
 
-    });
+    };
 
 
 }
@@ -595,19 +695,14 @@ function createPressureChart(rows){
 function buildResults(){
 
 
-    if(!pressureData.length)
-        return;
-
-
-
-    const table =
+    const body =
         document.getElementById(
             "pressureBody"
         );
 
 
 
-    if(!table)
+    if(!body)
         return;
 
 
@@ -617,60 +712,57 @@ function buildResults(){
 
 
     pressureData
-    .slice(0,20)
+    .slice(0,30)
     .forEach(
+
         (row,index)=>{
 
 
-        html += `
+            html += `
 
-        <tr>
+            <tr>
 
-        <td>${index+1}</td>
+            <td>${index+1}</td>
 
-        <td>
-        ${row.station_name || "Unknown"}
-        </td>
+            <td>
+            ${row.station_name || "Unknown"}
+            </td>
 
-        <td>
-        ${fmt(row.pm25)}
-        </td>
+            <td>
+            ${fmt(row.pm25)}
+            </td>
 
+            <td>
+            ${fmt(row.pm10)}
+            </td>
 
-        <td>
-        ${fmt(row.pm10)}
-        </td>
+            <td>
+            ${fmt(row.no2)}
+            </td>
 
+            <td>
+            ${fmt(row.pressure_score)}
+            </td>
 
-        <td>
-        ${fmt(row.no2)}
-        </td>
+            <td class="class-high">
+            ${row.pressure_class || "HIGH"}
+            </td>
 
+            </tr>
 
-        <td>
-        ${fmt(row.pressure_score)}
-        </td>
-
-
-        <td class="class-high">
-        ${row.pressure_class || "HIGH"}
-        </td>
-
-
-        </tr>
-
-        `;
+            `;
 
 
-    });
+        }
+
+    );
 
 
 
-    table.innerHTML=html;
+    body.innerHTML = html;
 
 
 }
-
 
 
 
@@ -688,16 +780,17 @@ function animateNumber(id,value){
         document.getElementById(id);
 
 
+
     if(!el)
         return;
 
 
 
-    let start=0;
+    let current=0;
 
 
     const step =
-        value / 60;
+        value/60;
 
 
 
@@ -705,13 +798,13 @@ function animateNumber(id,value){
         setInterval(()=>{
 
 
-            start += step;
+            current += step;
 
 
 
-            if(start>=value){
+            if(current>=value){
 
-                start=value;
+                current=value;
 
                 clearInterval(timer);
 
@@ -720,7 +813,7 @@ function animateNumber(id,value){
 
 
             el.textContent =
-            start.toFixed(2);
+            current.toFixed(2);
 
 
 
@@ -736,31 +829,14 @@ function animateNumber(id,value){
 
 
 // ============================================================
-// ERROR
-// ============================================================
-
-
-function showError(message){
-
-
-    console.error(
-        message
-    );
-
-
-}
-
-
-
-
-
-
-// ============================================================
 // START
 // ============================================================
 
 
 document.addEventListener(
+
     "DOMContentLoaded",
+
     loadAllData
+
 );
