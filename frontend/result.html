@@ -15,22 +15,40 @@
 
 <body>
 
+
 <header class="navbar">
 
     <div class="logo">
         URBAN<span>//</span>INTELLIGENCE
     </div>
 
+
     <nav>
-        <a href="index.html">Home</a>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="result.html" class="active">Results</a>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="dashboard.html">
+            Dashboard
+        </a>
+
+        <a href="result.html" class="active">
+            Results
+        </a>
+
     </nav>
 
 </header>
 
 
+
+
 <main class="results">
+
+
+
+    <!-- HEADER -->
 
     <div class="page-heading">
 
@@ -40,97 +58,198 @@
                 URBAN PRESSURE INDEX
             </p>
 
+
             <h1>
                 Pollution Hotspots
             </h1>
+
 
             <p>
                 Station-level urban pollution pressure ranking
             </p>
 
+
         </div>
+
+
+
+        <div class="status">
+
+            <span></span>
+
+            ANALYSIS COMPLETE
+
+        </div>
+
 
     </div>
 
 
+
+
+
+    <!-- TOP HOTSPOT -->
+
     <section class="top-result">
 
+
         <div>
+
 
             <p class="section-tag">
                 HIGHEST URBAN PRESSURE
             </p>
 
+
             <h2>
                 Mazgaon
             </h2>
+
 
             <p>
                 Mazgaon, Mumbai - IITM
             </p>
 
+
         </div>
+
+
+
 
         <div class="pressure-score">
 
-            <span>PRESSURE SCORE</span>
 
-            <strong>70.81</strong>
+            <span>
+                PRESSURE SCORE
+            </span>
 
-            <small>HIGH</small>
+
+            <strong>
+                70.81
+            </strong>
+
+
+            <small>
+                HIGH
+            </small>
+
 
         </div>
+
+
 
     </section>
 
 
+
+
+
+
+    <!-- TABLE -->
+
     <section class="table-section">
 
+
+
         <div class="section-heading">
+
 
             <p class="section-tag">
                 STATION RANKING
             </p>
 
+
             <h2>
                 Mumbai Urban Pressure
             </h2>
 
+
         </div>
+
+
+
 
 
         <div class="table-wrapper">
 
+
             <table id="pressureTable">
+
 
                 <thead>
 
+
                     <tr>
-                        <th>Rank</th>
-                        <th>Station</th>
-                        <th>PM2.5</th>
-                        <th>PM10</th>
-                        <th>NO₂</th>
-                        <th>Pressure</th>
-                        <th>Class</th>
+
+                        <th>
+                            Rank
+                        </th>
+
+
+                        <th>
+                            Station
+                        </th>
+
+
+                        <th>
+                            PM2.5
+                        </th>
+
+
+                        <th>
+                            PM10
+                        </th>
+
+
+                        <th>
+                            NO₂
+                        </th>
+
+
+                        <th>
+                            Pressure
+                        </th>
+
+
+                        <th>
+                            Class
+                        </th>
+
+
                     </tr>
+
 
                 </thead>
 
+
+
                 <tbody id="pressureBody">
+
 
                 </tbody>
 
+
+
             </table>
+
+
 
         </div>
 
+
+
     </section>
+
+
+
 
 </main>
 
 
+
 <script src="script.js"></script>
 
+
 </body>
+
 </html>
