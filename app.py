@@ -1,6 +1,11 @@
+```python
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 import os
+
+# ============================================================
+# APPLICATION
+# ============================================================
 
 app = Flask(__name__)
 CORS(app)
@@ -44,11 +49,37 @@ def results():
 
 
 # ============================================================
-# FRONTEND CSS / JS
+# FRONTEND FILES
+# CSS / JS / OTHER FRONTEND ASSETS
+# ============================================================
+
+@app.route("/frontend/<path:filename>")
+def frontend_assets(filename):
+    return send_from_directory(FRONTEND_DIR, filename)
+
+
+# ============================================================
+# DATA FILES
+# ============================================================
+
+@app.route("/data/<path:filename>")
+def data_files(filename):
+    file_path = os.path.join(DATA_DIR, filename)
+
+    if not os.path.isfile(file_path):
+        return "Data file not found", 404
+
+    return send_from_directory(DATA_DIR, filename)
+
+
+# ============================================================
+# DIRECT FRONTEND FILE ACCESS
+# Allows dashboard.html / result.html etc.
 # ============================================================
 
 @app.route("/<path:filename>")
-def frontend_files(filename):
+def direct_frontend_file(filename):
+
     file_path = os.path.join(FRONTEND_DIR, filename)
 
     if os.path.isfile(file_path):
@@ -58,17 +89,15 @@ def frontend_files(filename):
 
 
 # ============================================================
-# DATA FILES
-# ============================================================
-
-@app.route("/data/<path:filename>")
-def data_files(filename):
-    return send_from_directory(DATA_DIR, filename)
-
-
-# ============================================================
-# RUN
+# LOCAL DEVELOPMENT
 # ============================================================
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    port = int(os.environ.get("PORT", 5000))
+
+    app.run(
+        host="0.0.0.0",
+        port=port,
+        debug=False
+    )
+```
