@@ -6,7 +6,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Results | URBAN//INTELLIGENCE</title>
+    <title>
+        Results | URBAN//INTELLIGENCE
+    </title>
 
     <link rel="stylesheet" href="style.css">
 
@@ -17,6 +19,7 @@
 
 
 <header class="navbar">
+
 
     <div class="logo">
         URBAN<span>//</span>INTELLIGENCE
@@ -29,9 +32,11 @@
             Home
         </a>
 
+
         <a href="dashboard.html">
             Dashboard
         </a>
+
 
         <a href="result.html" class="active">
             Results
@@ -39,7 +44,9 @@
 
     </nav>
 
+
 </header>
+
 
 
 
@@ -48,9 +55,8 @@
 
 
 
-    <!-- HEADER -->
-
     <div class="page-heading">
+
 
         <div>
 
@@ -82,13 +88,14 @@
         </div>
 
 
+
     </div>
 
 
 
 
 
-    <!-- TOP HOTSPOT -->
+
 
     <section class="top-result">
 
@@ -101,7 +108,7 @@
             </p>
 
 
-            <h2>
+            <h2 id="resultStation">
                 Mazgaon
             </h2>
 
@@ -124,18 +131,17 @@
             </span>
 
 
-            <strong>
+            <strong id="resultScore">
                 70.81
             </strong>
 
 
-            <small>
+            <small id="resultClass">
                 HIGH
             </small>
 
 
         </div>
-
 
 
     </section>
@@ -145,10 +151,8 @@
 
 
 
-    <!-- TABLE -->
 
     <section class="table-section">
-
 
 
         <div class="section-heading">
@@ -170,10 +174,12 @@
 
 
 
+
+
         <div class="table-wrapper">
 
 
-            <table id="pressureTable">
+            <table>
 
 
                 <thead>
@@ -181,39 +187,19 @@
 
                     <tr>
 
-                        <th>
-                            Rank
-                        </th>
+                        <th>Rank</th>
 
+                        <th>Station</th>
 
-                        <th>
-                            Station
-                        </th>
+                        <th>PM2.5</th>
 
+                        <th>PM10</th>
 
-                        <th>
-                            PM2.5
-                        </th>
+                        <th>NO₂</th>
 
+                        <th>Pressure</th>
 
-                        <th>
-                            PM10
-                        </th>
-
-
-                        <th>
-                            NO₂
-                        </th>
-
-
-                        <th>
-                            Pressure
-                        </th>
-
-
-                        <th>
-                            Class
-                        </th>
+                        <th>Class</th>
 
 
                     </tr>
@@ -223,8 +209,8 @@
 
 
 
-                <tbody id="pressureBody">
 
+                <tbody id="pressureBody">
 
                 </tbody>
 
@@ -243,11 +229,22 @@
 
 
 
+
 </main>
 
 
 
+
+
+<!-- CSV PARSER -->
+
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+
+<!-- MAIN SCRIPT -->
+
 <script src="script.js"></script>
+
 
 
 </body>
