@@ -58,21 +58,24 @@ The datasets are loaded by the frontend analytics engine and transformed into in
 
 ## 📁 Project Structure
 
-```text
 UrbanIntelligence/
 │
-├── index.html
-├── dashboard.html
-├── result.html
-├── style.css
-├── script.js
+├── data/
+│   ├── daily_pollution_pressure.csv
+│   ├── powerbi_urban_pressure.csv
+│   └── urban_pressure_by_station.csv
 │
-├── urban_pressure_by_station.csv
-├── powerbi_urban_pressure.csv
-├── daily_pollution_pressure.csv
+├── frontend/
+│   ├── dashboard.html
+│   ├── index.html
+│   ├── result.html
+│   ├── script.js
+│   └── style.css
 │
-└── render_start.txt
-```
+├── README.md
+├── app.py
+├── render_start.txt
+└── requirements.txt
 
 ---
 
