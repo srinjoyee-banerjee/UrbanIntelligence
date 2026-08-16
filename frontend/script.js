@@ -1,12 +1,13 @@
 // ============================================================
 // URBAN//INTELLIGENCE
-// NEON FRONTEND DATA ENGINE
+// FRONTEND DATA ENGINE
 // ============================================================
 
 
 const DATA_PATH = "/data/";
 
-const DATA_FILES = {
+
+const FILES = {
 
     pressure:
         DATA_PATH + "urban_pressure_by_station.csv",
@@ -20,10 +21,10 @@ const DATA_FILES = {
 };
 
 
+
 let pressureData = [];
 let powerbiData = [];
 let dailyData = [];
-
 
 
 
@@ -40,7 +41,7 @@ async function loadCSV(url){
     if(!response.ok){
 
         throw new Error(
-            "Cannot load " + url
+            "CSV loading failed: " + url
         );
 
     }
@@ -48,6 +49,7 @@ async function loadCSV(url){
 
     const text =
         await response.text();
+
 
 
     return Papa.parse(
@@ -70,27 +72,19 @@ async function loadCSV(url){
 // ============================================================
 
 
-function num(value){
+function fmt(value){
 
-    const n = Number(value);
-
-    return Number.isFinite(n)
-        ? n
-        : null;
-
-}
+    let n = Number(value);
 
 
+    if(isNaN(n))
+        return "—";
 
-function fmt(value,digits=2){
 
-    const n=num(value);
-
-    return n===null
-        ? "—"
-        : n.toFixed(digits);
+    return n.toFixed(2);
 
 }
+
 
 
 
@@ -99,9 +93,10 @@ function setText(id,value){
     const el =
         document.getElementById(id);
 
+
     if(el){
 
-        el.textContent=value;
+        el.textContent = value;
 
     }
 
@@ -110,99 +105,47 @@ function setText(id,value){
 
 
 
-function findColumn(row,names){
-
-    if(!row)
-        return null;
-
-
-    const keys =
-        Object.keys(row);
-
-
-
-    for(const name of names){
-
-        const col =
-            keys.find(
-                k =>
-                k.toLowerCase().trim()
-                ===
-                name.toLowerCase()
-            );
-
-
-        if(col)
-            return col;
-
-    }
-
-
-
-    for(const name of names){
-
-        const col =
-            keys.find(
-                k =>
-                k.toLowerCase()
-                .includes(
-                    name.toLowerCase()
-                )
-            );
-
-
-        if(col)
-            return col;
-
-    }
-
-
-    return null;
-
-}
-
-
-
-
-
 // ============================================================
-// LOAD DATA
+// LOAD ALL DATA
 // ============================================================
 
 
-async function loadAllData(){
+async function loadData(){
 
     try{
 
 
-        [
-            pressureData,
-            powerbiData,
-            dailyData
+        pressureData =
+            await loadCSV(
+                FILES.pressure
+            );
 
-        ] =
-        await Promise.all([
 
-            loadCSV(DATA_FILES.pressure),
+        powerbiData =
+            await loadCSV(
+                FILES.powerbi
+            );
 
-            loadCSV(DATA_FILES.powerbi),
 
-            loadCSV(DATA_FILES.daily)
-
-        ]);
+        dailyData =
+            await loadCSV(
+                FILES.daily
+            );
 
 
 
         console.log(
-            "URBAN//INTELLIGENCE READY"
+            "DATA LOADED",
+            pressureData.length
         );
 
 
-        populatePage();
 
+        routePage();
 
 
     }
+
 
     catch(error){
 
@@ -217,11 +160,11 @@ async function loadAllData(){
 
 
 // ============================================================
-// ROUTER
+// PAGE ROUTER
 // ============================================================
 
 
-function populatePage(){
+function routePage(){
 
 
     const page =
@@ -232,69 +175,18 @@ function populatePage(){
 
     if(page.includes("dashboard")){
 
-
-        buildDashboard();
-
+        dashboardPage();
 
     }
+
 
 
     else if(page.includes("result")){
 
-
-        buildResults();
-
+        resultsPage();
 
     }
 
-
-    else{
-
-
-        buildHome();
-
-
-    }
-
-
-}
-
-
-
-
-
-// ============================================================
-// HOME
-// ============================================================
-
-
-function buildHome(){
-
-
-    const stationColumn =
-        findColumn(
-            pressureData[0],
-            [
-                "station_name",
-                "station"
-            ]
-        );
-
-
-
-    const stations =
-        new Set(
-            pressureData.map(
-                r=>r[stationColumn]
-            )
-        ).size;
-
-
-
-    setText(
-        "station-count",
-        stations || 30
-    );
 
 
 }
@@ -308,7 +200,7 @@ function buildHome(){
 // ============================================================
 
 
-function buildDashboard(){
+function dashboardPage(){
 
 
     if(!pressureData.length)
@@ -316,57 +208,21 @@ function buildDashboard(){
 
 
 
-    const row =
-        pressureData[0];
-
-
-
-    const pm25 =
-        findColumn(
-            row,
-            [
-                "pm25",
-                "avg_pm25"
-            ]
-        );
-
-
-    const pm10 =
-        findColumn(
-            row,
-            [
-                "pm10",
-                "avg_pm10"
-            ]
-        );
-
-
-    const no2 =
-        findColumn(
-            row,
-            [
-                "no2",
-                "avg_no2"
-            ]
-        );
-
-
-
     animateNumber(
         "avgPM25",
-        average(pm25)
+        average("avg_pm25")
     );
 
 
     animateNumber(
         "avgPM10",
-        average(pm10)
+        average("avg_pm10")
     );
 
 
     animateNumber(
         "avgNO2",
-        average(no2)
+        average("avg_no2")
     );
 
 
@@ -385,18 +241,13 @@ function buildDashboard(){
 function average(column){
 
 
-    if(!column)
-        return 0;
-
-
-
     const values =
         pressureData
         .map(
-            r=>num(r[column])
+            r => Number(r[column])
         )
         .filter(
-            x=>x!==null
+            x => !isNaN(x)
         );
 
 
@@ -440,11 +291,8 @@ function createSeasonChart(){
 
 
     new Chart(
-
         canvas,
-
         {
-
 
         type:"line",
 
@@ -462,9 +310,10 @@ function createSeasonChart(){
             ],
 
 
+
             datasets:[{
 
-                label:"Pollution Pressure",
+                label:"PM2.5 Pressure",
 
 
                 data:[
@@ -475,6 +324,7 @@ function createSeasonChart(){
                     45
 
                 ],
+
 
 
                 borderColor:"#f5ff00",
@@ -494,14 +344,11 @@ function createSeasonChart(){
         },
 
 
-        options:chartOptions()
+        options:chartTheme()
 
 
         }
-
-
     );
-
 
 }
 
@@ -534,7 +381,6 @@ function createHourChart(){
 
         {
 
-
         type:"bar",
 
 
@@ -557,6 +403,7 @@ function createHourChart(){
 
             datasets:[{
 
+
                 label:"PM2.5",
 
 
@@ -574,8 +421,8 @@ function createHourChart(){
                 ],
 
 
-                backgroundColor:
-                "#f5ff00",
+
+                backgroundColor:"#f5ff00",
 
 
                 borderRadius:8
@@ -587,11 +434,10 @@ function createHourChart(){
         },
 
 
-        options:chartOptions()
+        options:chartTheme()
 
 
         }
-
 
     );
 
@@ -602,17 +448,9 @@ function createHourChart(){
 
 
 
-
-// ============================================================
-// CHART STYLE
-// ============================================================
-
-
-function chartOptions(){
-
+function chartTheme(){
 
     return {
-
 
         responsive:true,
 
@@ -632,12 +470,9 @@ function chartOptions(){
 
                 labels:{
 
-
                     color:"#f5ff00"
 
-
                 }
-
 
             }
 
@@ -650,35 +485,29 @@ function chartOptions(){
 
             x:{
 
-
                 ticks:{
 
-                    color:"#999"
+                    color:"#aaa"
 
                 }
-
 
             },
 
 
             y:{
 
-
                 ticks:{
 
-                    color:"#999"
+                    color:"#aaa"
 
                 }
-
 
             }
 
 
         }
 
-
     };
-
 
 }
 
@@ -686,13 +515,12 @@ function chartOptions(){
 
 
 
-
 // ============================================================
-// RESULTS
+// RESULTS TABLE
 // ============================================================
 
 
-function buildResults(){
+function resultsPage(){
 
 
     const body =
@@ -701,56 +529,84 @@ function buildResults(){
         );
 
 
-
     if(!body)
         return;
 
 
 
-    let html="";
+    let html = "";
 
 
 
     pressureData
+
+    .sort(
+
+        (a,b)=>
+
+        Number(b.pressure_score)
+
+        -
+
+        Number(a.pressure_score)
+
+    )
+
     .slice(0,30)
+
+
     .forEach(
 
         (row,index)=>{
 
 
-            html += `
+        html += `
 
-            <tr>
 
-            <td>${index+1}</td>
+        <tr>
 
-            <td>
-            ${row.station_name || "Unknown"}
-            </td>
 
-            <td>
-            ${fmt(row.pm25)}
-            </td>
+        <td>
+        ${index+1}
+        </td>
 
-            <td>
-            ${fmt(row.pm10)}
-            </td>
 
-            <td>
-            ${fmt(row.no2)}
-            </td>
+        <td>
+        ${row["Station Name"]}
+        </td>
 
-            <td>
-            ${fmt(row.pressure_score)}
-            </td>
 
-            <td class="class-high">
-            ${row.pressure_class || "HIGH"}
-            </td>
+        <td>
+        ${fmt(row.avg_pm25)}
+        </td>
 
-            </tr>
 
-            `;
+        <td>
+        ${fmt(row.avg_pm10)}
+        </td>
+
+
+        <td>
+        ${fmt(row.avg_no2)}
+        </td>
+
+
+        <td>
+        ${fmt(row.pressure_score)}
+        </td>
+
+
+        <td class="class-high">
+
+        ${row.pressure_class}
+
+        </td>
+
+
+        </tr>
+
+
+        `;
 
 
         }
@@ -773,12 +629,11 @@ function buildResults(){
 // ============================================================
 
 
-function animateNumber(id,value){
+function animateNumber(id,target){
 
 
     const el =
         document.getElementById(id);
-
 
 
     if(!el)
@@ -786,11 +641,11 @@ function animateNumber(id,value){
 
 
 
-    let current=0;
+    let value=0;
 
 
     const step =
-        value/60;
+        target/60;
 
 
 
@@ -798,13 +653,13 @@ function animateNumber(id,value){
         setInterval(()=>{
 
 
-            current += step;
+            value += step;
 
 
 
-            if(current>=value){
+            if(value>=target){
 
-                current=value;
+                value=target;
 
                 clearInterval(timer);
 
@@ -813,16 +668,14 @@ function animateNumber(id,value){
 
 
             el.textContent =
-            current.toFixed(2);
+            value.toFixed(2);
 
 
 
         },20);
 
 
-
 }
-
 
 
 
@@ -837,6 +690,6 @@ document.addEventListener(
 
     "DOMContentLoaded",
 
-    loadAllData
+    loadData
 
 );
