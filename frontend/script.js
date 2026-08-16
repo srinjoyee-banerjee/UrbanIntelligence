@@ -1,67 +1,247 @@
 // ============================================================
 // URBAN//INTELLIGENCE
-// FRONTEND DATA ENGINE
+// FINAL FRONTEND SCRIPT
 // ============================================================
 
 
-const DATA_PATH = "/data/";
-
-
-const FILES = {
-
-    pressure:
-        DATA_PATH + "urban_pressure_by_station.csv",
-
-    powerbi:
-        DATA_PATH + "powerbi_urban_pressure.csv",
-
-    daily:
-        DATA_PATH + "daily_pollution_pressure.csv"
-
-};
-
+const DATA_URL = "/data/urban_pressure_by_station.csv";
 
 
 let pressureData = [];
-let powerbiData = [];
-let dailyData = [];
 
 
 
 // ============================================================
-// CSV LOADER
+// LOAD CSV
 // ============================================================
 
+async function loadCSV(){
 
-async function loadCSV(url){
+    try{
 
-    const response = await fetch(url);
+        const response = await fetch(DATA_URL);
 
 
-    if(!response.ok){
+        const text = await response.text();
 
-        throw new Error(
-            "CSV loading failed: " + url
+
+        pressureData = Papa.parse(
+            text,
+            {
+                header:true,
+                skipEmptyLines:true,
+                dynamicTyping:true
+            }
+        ).data;
+
+
+
+        console.log(
+            "CSV Loaded:",
+            pressureData.length
+        );
+
+
+        startApp();
+
+
+    }
+
+    catch(error){
+
+        console.error(
+            "CSV ERROR",
+            error
         );
 
     }
 
-
-    const text =
-        await response.text();
+}
 
 
 
-    return Papa.parse(
-        text,
-        {
-            header:true,
-            skipEmptyLines:true,
-            dynamicTyping:true
-        }
-    ).data;
+
+// ============================================================
+// ROUTER
+// ============================================================
+
+function startApp(){
+
+
+    const path =
+        window.location.pathname.toLowerCase();
+
+
+
+    if(path.includes("result")){
+
+        buildResults();
+
+    }
+
+
+
+    if(path.includes("dashboard")){
+
+        buildDashboard();
+
+    }
+
 
 }
+
+
+
+
+// ============================================================
+// RESULTS PAGE
+// ============================================================
+
+function buildResults(){
+
+
+    const tbody =
+        document.getElementById(
+            "pressureBody"
+        );
+
+
+    if(!tbody){
+
+        console.log(
+            "Table body missing"
+        );
+
+        return;
+
+    }
+
+
+
+    const sorted =
+        pressureData.sort(
+            (a,b)=>
+            Number(b.pressure_score)
+            -
+            Number(a.pressure_score)
+        );
+
+
+
+    let html = "";
+
+
+
+    sorted.slice(0,30)
+    .forEach(
+        (row,index)=>{
+
+
+        html += `
+
+        <tr>
+
+            <td>
+                ${index+1}
+            </td>
+
+
+            <td>
+                ${row["Station Name"]}
+            </td>
+
+
+            <td>
+                ${Number(row.avg_pm25).toFixed(2)}
+            </td>
+
+
+            <td>
+                ${Number(row.avg_pm10).toFixed(2)}
+            </td>
+
+
+            <td>
+                ${Number(row.avg_no2).toFixed(2)}
+            </td>
+
+
+            <td>
+                ${Number(row.pressure_score).toFixed(2)}
+            </td>
+
+
+            <td>
+                ${row.pressure_class}
+            </td>
+
+
+        </tr>
+
+        `;
+
+
+        }
+
+    );
+
+
+
+    tbody.innerHTML = html;
+
+
+
+    console.log(
+        "Ranking table created"
+    );
+
+}
+
+
+
+
+
+
+// ============================================================
+// DASHBOARD
+// ============================================================
+
+function buildDashboard(){
+
+
+    const pm25 =
+        average("avg_pm25");
+
+
+    const pm10 =
+        average("avg_pm10");
+
+
+    const no2 =
+        average("avg_no2");
+
+
+
+    setText(
+        "avgPM25",
+        pm25.toFixed(2)
+    );
+
+
+    setText(
+        "avgPM10",
+        pm10.toFixed(2)
+    );
+
+
+    setText(
+        "avgNO2",
+        no2.toFixed(2)
+    );
+
+
+}
+
 
 
 
@@ -72,19 +252,26 @@ async function loadCSV(url){
 // ============================================================
 
 
-function fmt(value){
-
-    let n = Number(value);
+function average(column){
 
 
-    if(isNaN(n))
-        return "—";
+    let values =
+        pressureData
+        .map(
+            r=>Number(r[column])
+        )
+        .filter(
+            x=>!isNaN(x)
+        );
 
 
-    return n.toFixed(2);
+    return values.reduce(
+        (a,b)=>a+b,
+        0
+    ) / values.length;
+
 
 }
-
 
 
 
@@ -96,587 +283,11 @@ function setText(id,value){
 
     if(el){
 
-        el.textContent = value;
+        el.textContent=value;
 
     }
 
 }
-
-
-
-
-// ============================================================
-// LOAD ALL DATA
-// ============================================================
-
-
-async function loadData(){
-
-    try{
-
-
-        pressureData =
-            await loadCSV(
-                FILES.pressure
-            );
-
-
-        powerbiData =
-            await loadCSV(
-                FILES.powerbi
-            );
-
-
-        dailyData =
-            await loadCSV(
-                FILES.daily
-            );
-
-
-
-        console.log(
-            "DATA LOADED",
-            pressureData.length
-        );
-
-
-
-        routePage();
-
-
-    }
-
-
-    catch(error){
-
-        console.error(error);
-
-    }
-
-}
-
-
-
-
-
-// ============================================================
-// PAGE ROUTER
-// ============================================================
-
-
-function routePage(){
-
-
-    const page =
-        window.location.pathname
-        .toLowerCase();
-
-
-
-    if(page.includes("dashboard")){
-
-        dashboardPage();
-
-    }
-
-
-
-    else if(page.includes("result")){
-
-        resultsPage();
-
-    }
-
-
-
-}
-
-
-
-
-
-// ============================================================
-// DASHBOARD
-// ============================================================
-
-
-function dashboardPage(){
-
-
-    if(!pressureData.length)
-        return;
-
-
-
-    animateNumber(
-        "avgPM25",
-        average("avg_pm25")
-    );
-
-
-    animateNumber(
-        "avgPM10",
-        average("avg_pm10")
-    );
-
-
-    animateNumber(
-        "avgNO2",
-        average("avg_no2")
-    );
-
-
-
-    createSeasonChart();
-
-    createHourChart();
-
-
-}
-
-
-
-
-
-function average(column){
-
-
-    const values =
-        pressureData
-        .map(
-            r => Number(r[column])
-        )
-        .filter(
-            x => !isNaN(x)
-        );
-
-
-
-    if(!values.length)
-        return 0;
-
-
-
-    return values.reduce(
-        (a,b)=>a+b,
-        0
-    )
-    /
-    values.length;
-
-
-}
-
-
-
-
-
-// ============================================================
-// SEASON CHART
-// ============================================================
-
-
-function createSeasonChart(){
-
-
-    const canvas =
-        document.getElementById(
-            "seasonChart"
-        );
-
-
-    if(!canvas)
-        return;
-
-
-
-    new Chart(
-        canvas,
-        {
-
-        type:"line",
-
-
-        data:{
-
-
-            labels:[
-
-                "Winter",
-                "Summer",
-                "Monsoon",
-                "Post Monsoon"
-
-            ],
-
-
-
-            datasets:[{
-
-                label:"PM2.5 Pressure",
-
-
-                data:[
-
-                    62,
-                    38,
-                    24,
-                    45
-
-                ],
-
-
-
-                borderColor:"#f5ff00",
-
-                backgroundColor:
-                "rgba(245,255,0,0.15)",
-
-
-                fill:true,
-
-                tension:0.4
-
-
-            }]
-
-
-        },
-
-
-        options:chartTheme()
-
-
-        }
-    );
-
-}
-
-
-
-
-
-// ============================================================
-// HOURLY CHART
-// ============================================================
-
-
-function createHourChart(){
-
-
-    const canvas =
-        document.getElementById(
-            "hourChart"
-        );
-
-
-    if(!canvas)
-        return;
-
-
-
-    new Chart(
-
-        canvas,
-
-        {
-
-        type:"bar",
-
-
-        data:{
-
-
-            labels:[
-
-                "00",
-                "03",
-                "06",
-                "09",
-                "12",
-                "15",
-                "18",
-                "21"
-
-            ],
-
-
-            datasets:[{
-
-
-                label:"PM2.5",
-
-
-                data:[
-
-                    28,
-                    31,
-                    40,
-                    58,
-                    45,
-                    39,
-                    50,
-                    54
-
-                ],
-
-
-
-                backgroundColor:"#f5ff00",
-
-
-                borderRadius:8
-
-
-            }]
-
-
-        },
-
-
-        options:chartTheme()
-
-
-        }
-
-    );
-
-
-}
-
-
-
-
-
-function chartTheme(){
-
-    return {
-
-        responsive:true,
-
-
-        animation:{
-
-            duration:1500
-
-        },
-
-
-        plugins:{
-
-
-            legend:{
-
-
-                labels:{
-
-                    color:"#f5ff00"
-
-                }
-
-            }
-
-
-        },
-
-
-        scales:{
-
-
-            x:{
-
-                ticks:{
-
-                    color:"#aaa"
-
-                }
-
-            },
-
-
-            y:{
-
-                ticks:{
-
-                    color:"#aaa"
-
-                }
-
-            }
-
-
-        }
-
-    };
-
-}
-
-
-
-
-
-// ============================================================
-// RESULTS TABLE
-// ============================================================
-
-
-function resultsPage(){
-
-
-    const body =
-        document.getElementById(
-            "pressureBody"
-        );
-
-
-    if(!body)
-        return;
-
-
-
-    let html = "";
-
-
-
-    pressureData
-
-    .sort(
-
-        (a,b)=>
-
-        Number(b.pressure_score)
-
-        -
-
-        Number(a.pressure_score)
-
-    )
-
-    .slice(0,30)
-
-
-    .forEach(
-
-        (row,index)=>{
-
-
-        html += `
-
-
-        <tr>
-
-
-        <td>
-        ${index+1}
-        </td>
-
-
-        <td>
-        ${row["Station Name"]}
-        </td>
-
-
-        <td>
-        ${fmt(row.avg_pm25)}
-        </td>
-
-
-        <td>
-        ${fmt(row.avg_pm10)}
-        </td>
-
-
-        <td>
-        ${fmt(row.avg_no2)}
-        </td>
-
-
-        <td>
-        ${fmt(row.pressure_score)}
-        </td>
-
-
-        <td class="class-high">
-
-        ${row.pressure_class}
-
-        </td>
-
-
-        </tr>
-
-
-        `;
-
-
-        }
-
-    );
-
-
-
-    body.innerHTML = html;
-
-
-}
-
-
-
-
-
-// ============================================================
-// NUMBER ANIMATION
-// ============================================================
-
-
-function animateNumber(id,target){
-
-
-    const el =
-        document.getElementById(id);
-
-
-    if(!el)
-        return;
-
-
-
-    let value=0;
-
-
-    const step =
-        target/60;
-
-
-
-    const timer =
-        setInterval(()=>{
-
-
-            value += step;
-
-
-
-            if(value>=target){
-
-                value=target;
-
-                clearInterval(timer);
-
-            }
-
-
-
-            el.textContent =
-            value.toFixed(2);
-
-
-
-        },20);
-
-
-}
-
 
 
 
@@ -687,9 +298,6 @@ function animateNumber(id,target){
 
 
 document.addEventListener(
-
     "DOMContentLoaded",
-
-    loadData
-
+    loadCSV
 );
