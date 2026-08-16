@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -9,7 +11,9 @@
     <link rel="stylesheet" href="style.css">
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
+
 
 <body>
 
@@ -20,9 +24,19 @@
     </div>
 
     <nav>
-        <a href="index.html">Home</a>
-        <a href="dashboard.html" class="active">Dashboard</a>
-        <a href="result.html">Results</a>
+
+        <a href="index.html">
+            Home
+        </a>
+
+        <a href="dashboard.html" class="active">
+            Dashboard
+        </a>
+
+        <a href="result.html">
+            Results
+        </a>
+
     </nav>
 
 </header>
@@ -30,10 +44,18 @@
 
 <main class="dashboard">
 
+
+    <!-- =====================================================
+         DASHBOARD HEADER
+         ===================================================== -->
+
     <div class="page-heading">
 
         <div>
-            <p class="section-tag">CITY MONITORING SYSTEM</p>
+
+            <p class="section-tag">
+                CITY MONITORING SYSTEM
+            </p>
 
             <h1>
                 Mumbai Air Quality
@@ -42,143 +64,277 @@
             <p>
                 2024–2025 • 30 monitoring stations
             </p>
+
         </div>
 
+
         <div class="status">
+
             <span></span>
+
             DATASET READY
+
         </div>
 
     </div>
 
 
-    <!-- KPI CARDS -->
+
+    <!-- =====================================================
+         KPI INTELLIGENCE
+         ===================================================== -->
 
     <section class="kpi-grid">
 
-        <div class="kpi">
-            <span>AVERAGE PM2.5</span>
-            <strong id="avgPM25">34.41</strong>
-            <small>µg/m³</small>
-        </div>
 
         <div class="kpi">
-            <span>AVERAGE PM10</span>
-            <strong id="avgPM10">87.65</strong>
-            <small>µg/m³</small>
+
+            <span>
+                AVERAGE PM2.5
+            </span>
+
+            <strong id="avgPM25">
+                34.41
+            </strong>
+
+            <small>
+                µg/m³
+            </small>
+
         </div>
 
+
+
         <div class="kpi">
-            <span>AVERAGE NO₂</span>
-            <strong id="avgNO2">25.49</strong>
-            <small>µg/m³</small>
+
+            <span>
+                AVERAGE PM10
+            </span>
+
+            <strong id="avgPM10">
+                87.65
+            </strong>
+
+            <small>
+                µg/m³
+            </small>
+
         </div>
+
+
+
+        <div class="kpi">
+
+            <span>
+                AVERAGE NO₂
+            </span>
+
+            <strong id="avgNO2">
+                25.49
+            </strong>
+
+            <small>
+                µg/m³
+            </small>
+
+        </div>
+
+
 
         <div class="kpi highlight">
-            <span>HIGH PRESSURE STATION</span>
-            <strong>MAZGAON</strong>
-            <small>Pressure Score: 70.81</small>
+
+            <span>
+                HIGH PRESSURE STATION
+            </span>
+
+            <strong>
+                MAZGAON
+            </strong>
+
+            <small>
+                Pressure Score: 70.81
+            </small>
+
         </div>
+
 
     </section>
 
 
-    <!-- CHARTS -->
+
+    <!-- =====================================================
+         ANALYTICS CHARTS
+         ===================================================== -->
 
     <section class="chart-grid">
+
+
+        <!-- SEASONAL -->
 
         <div class="chart-card large">
 
             <div class="chart-header">
 
                 <div>
-                    <span class="section-tag">SEASONAL ANALYSIS</span>
-                    <h2>Pollution by Season</h2>
+
+                    <span class="section-tag">
+                        SEASONAL ANALYSIS
+                    </span>
+
+                    <h2>
+                        Pollution by Season
+                    </h2>
+
                 </div>
 
             </div>
+
 
             <canvas id="seasonChart"></canvas>
 
         </div>
 
 
+
+        <!-- HOURLY -->
+
         <div class="chart-card">
 
             <div class="chart-header">
 
                 <div>
-                    <span class="section-tag">DAILY PATTERN</span>
-                    <h2>Hourly PM2.5</h2>
+
+                    <span class="section-tag">
+                        DAILY PATTERN
+                    </span>
+
+                    <h2>
+                        Hourly PM2.5
+                    </h2>
+
                 </div>
 
             </div>
+
 
             <canvas id="hourChart"></canvas>
 
         </div>
 
+
     </section>
 
 
-    <!-- INSIGHTS -->
+
+    <!-- =====================================================
+         KEY INTELLIGENCE
+         ===================================================== -->
 
     <section class="insight-section">
 
+
         <div class="section-heading">
 
-            <p class="section-tag">KEY INTELLIGENCE</p>
+            <p class="section-tag">
+                KEY INTELLIGENCE
+            </p>
 
-            <h2>What the data says</h2>
+            <h2>
+                What the data says
+            </h2>
 
         </div>
+
 
 
         <div class="insight-grid">
 
+
             <div class="insight">
-                <span>01</span>
-                <h3>Winter pressure</h3>
+
+                <span>
+                    01
+                </span>
+
+                <h3>
+                    Winter pressure
+                </h3>
+
                 <p>
                     Winter records the highest PM2.5,
                     PM10 and overall pollution pressure.
                 </p>
+
             </div>
 
+
+
             <div class="insight">
-                <span>02</span>
-                <h3>Morning peak</h3>
+
+                <span>
+                    02
+                </span>
+
+                <h3>
+                    Morning peak
+                </h3>
+
                 <p>
                     PM2.5 reaches its highest hourly level
                     around 09:00.
                 </p>
+
             </div>
 
+
+
             <div class="insight">
-                <span>03</span>
-                <h3>Night NO₂</h3>
+
+                <span>
+                    03
+                </span>
+
+                <h3>
+                    Night NO₂
+                </h3>
+
                 <p>
                     NO₂ reaches its highest hourly average
                     around 22:00.
                 </p>
+
             </div>
 
+
+
             <div class="insight">
-                <span>04</span>
-                <h3>Urban hotspot</h3>
+
+                <span>
+                    04
+                </span>
+
+                <h3>
+                    Urban hotspot
+                </h3>
+
                 <p>
                     Mazgaon records the highest urban
                     pressure score at 70.81.
                 </p>
+
             </div>
+
 
         </div>
 
     </section>
 
+
 </main>
+
 
 <script src="script.js"></script>
 
 </body>
+
 </html>
